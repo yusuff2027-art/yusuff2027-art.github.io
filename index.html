@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Чё По Авито — поиск выгодных телефонов на Авито</title>
+
+  <meta name="description" content="Чё По Авито — Telegram-бот для мониторинга новых объявлений iPhone и Android на Авито. Ловите выгодные цены и снижение стоимости раньше других.">
+
+  <meta name="keywords" content="бот Авито, бот для Авито, мониторинг Авито, телефоны Авито, iPhone Авито, поиск телефонов Авито">
+
+  <meta name="theme-color" content="#080808">
+
+  <meta property="og:title" content="Чё По Авито — ловим выгодные телефоны">
+  <meta property="og:description" content="Мониторинг новых объявлений и выгодных цен на телефоны прямо в Telegram.">
+  <meta property="og:type" content="website">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #261000 0%, #0b0b0b 35%, #050505 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    header {
+      padding: 22px 0;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .logo span {
+      color: #ff6500;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 75px 0 65px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 9px 15px;
+      border-radius: 50px;
+      background: rgba(255, 90, 0, 0.08);
+      border: 1px solid rgba(255, 100, 0, 0.3);
+      color: #ff9a5c;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 8vw, 82px);
+      line-height: 0.98;
+      letter-spacing: -4px;
+      margin-bottom: 25px;
+    }
+
+    .orange {
+      background: linear-gradient(90deg, #ffb067, #ff5a00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text {
+      max-width: 700px;
+      margin: auto;
+      color: #aaa;
+      font-size: 18px;
+    }
+
+    .buttons {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 16px 25px;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #ff5a00, #ff8a00);
+      box-shadow: 0 15px 40px rgba(255, 90, 0, 0.25);
+    }
+
+    .secondary {
+      border: 1px solid #292929;
+      background: #111111;
+    }
+
+    .stats {
+      max-width: 800px;
+      margin: 45px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: rgba(20,20,20,0.8);
+      border: 1px solid #262626;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: #888;
+      font-size: 13px;
+    }
+
+    section {
+      padding: 70px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 38px;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      max-width: 650px;
+      margin: auto;
+      color: #999;
+      margin-bottom: 35px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #141414, #0e0e0e);
+      border: 1px solid #282828;
+      border-radius: 22px;
+      padding: 27px;
+    }
+
+    .icon {
+      font-size: 34px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      background: #111;
+      border: 1px solid #282828;
+      border-radius: 22px;
+      padding: 27px;
+    }
+
+    .number {
+      color: #ff6500;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .step h3 {
+      margin: 10px 0;
+    }
+
+    .step p {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .faq {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    details {
+      border-bottom: 1px solid #292929;
+      padding: 19px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    details p {
+      color: #999;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 60px 25px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at center top, #3a1705, #111 65%);
+      border: 1px solid #442613;
+    }
+
+    .cta h2 {
+      font-size: 42px;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+    }
+
+    .cta p {
+      color: #999;
+      max-width: 600px;
+      margin: auto auto 25px;
+    }
+
+    footer {
+      border-top: 1px solid #202020;
+      padding: 28px 0;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    @media (max-width: 750px) {
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2.5px;
+      }
+
+      .stats,
+      .cards,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 31px;
+      }
+
+      .cta h2 {
+        font-size: 32px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+    <div class="logo">
+      Чё По <span>Авито</span> 🔥
+    </div>
+
+    <div class="nav-links">
+      <a href="#features">Возможности</a>
+      <a href="#how">Как работает</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+  </div>
+</header>
+
+
+<main>
+
+<section class="hero">
+
+  <div class="container">
+
+    <div class="badge">
+      🟢 Telegram-бот уже работает
+    </div>
+
+    <h1>
+      Лови выгодные<br>
+      <span class="orange">телефоны на Авито</span>
+    </h1>
+
+    <p class="hero-text">
+      «Чё По Авито» помогает автоматически мониторить объявления
+      и быстрее находить интересные iPhone и Android прямо в Telegram.
+    </p>
+
+    <div class="buttons">
+
+      <a
+        class="button primary"
+        href="https://t.me/ChePoAvito_bot"
+        target="_blank"
+      >
+        🚀 Запустить бота
+      </a>
+
+      <a class="button secondary" href="#how">
+        Как это работает →
+      </a>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>📱 iPhone</strong>
+        <span>Популярные модели</span>
+      </div>
+
+      <div class="stat">
+        <strong>🤖 Android</strong>
+        <span>Samsung, Xiaomi и другие</span>
+      </div>
+
+      <div class="stat">
+        <strong>⚡ Telegram</strong>
+        <span>Уведомления прямо в боте</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="features">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Не обновляй Авито вручную
+    </h2>
+
+    <p class="section-subtitle">
+      Настрой поиск и следи за интересующими предложениями
+      прямо из Telegram.
+    </p>
+
+    <div class="cards">
+
+      <div class="card">
+
+        <div class="icon">⚡</div>
+
+        <h3>
+          Новые объявления
+        </h3>
+
+        <p>
+          Следи за появлением новых предложений
+          по нужным параметрам.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">📉</div>
+
+        <h3>
+          Снижение цены
+        </h3>
+
+        <p>
+          Отслеживай изменение стоимости и
+          не пропускай выгодные предложения.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">🔥</div>
+
+        <h3>
+          Ниже рынка
+        </h3>
+
+        <p>
+          Ищи интересные варианты для покупки
+          или перепродажи.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="how">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Как это работает
+    </h2>
+
+    <p class="section-subtitle">
+      Три простых шага — и можно начинать поиск.
+    </p>
+
+    <div class="steps">
+
+      <div class="step">
+
+        <div class="number">
+          01
+        </div>
+
+        <h3>
+          Запусти бота
+        </h3>
+
+        <p>
+          Открой «Чё По Авито» в Telegram
+          и нажми кнопку запуска.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="number">
+          02
+        </div>
+
+        <h3>
+          Настрой поиск
+        </h3>
+
+        <p>
+          Выбери нужный тип устройства
+          и параметры мониторинга.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="number">
+          03
+        </div>
+
+        <h3>
+          Получай уведомления
+        </h3>
+
+        <p>
+          Подходящие объявления будут
+          приходить прямо в Telegram.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="faq">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Частые вопросы
+    </h2>
+
+    <div class="faq">
+
+      <details>
+
+        <summary>
+          Что такое «Чё По Авито»?
+        </summary>
+
+        <p>
+          Это Telegram-бот для мониторинга объявлений Авито.
+          Он помогает искать интересующие телефоны
+          и получать уведомления о подходящих предложениях.
+        </p>
+
+      </details>
+
+
+      <details>
+
+        <summary>
+          Можно искать iPhone?
+        </summary>
+
+        <p>
+          Да. Бот ориентирован на поиск смартфонов,
+          включая iPhone и Android.
+        </p>
+
+      </details>
+
+
+      <details>
+
+        <summary>
+          Нужно постоянно открывать Авито?
+        </summary>
+
+        <p>
+          Нет. Бот предназначен для автоматизации мониторинга
+          и отправки подходящих результатов в Telegram.
+        </p>
+
+      </details>
+
+
+      <details>
+
+        <summary>
+          Бот бесплатный?
+        </summary>
+
+        <p>
+          Актуальные условия и доступные функции
+          можно посмотреть непосредственно в Telegram-боте.
+        </p>
+
+      </details>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="cta">
+
+      <h2>
+        Готов ловить выгодные объявления?
+      </h2>
+
+      <p>
+        Запусти «Чё По Авито» и настрой свой поиск
+        прямо сейчас.
+      </p>
+
+      <a
+        class="button primary"
+        href="https://t.me/ChePoAvito_bot"
+        target="_blank"
+      >
+        🔥 Открыть @ChePoAvito_bot
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div class="container footer-content">
+
+    <span>
+      © 2026 Чё По Авито
+    </span>
+
+    <span>
+      Telegram: @ChePoAvito_bot
+    </span>
+
+  </div>
+
+</footer>
+
+</body>
+</html>
